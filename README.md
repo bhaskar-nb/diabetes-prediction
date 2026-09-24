@@ -1,235 +1,217 @@
-# Diabetes Prediction System
+# Diabetes Prediction — Machine Learning + Streamlit
 
-A machine learning web application that predicts whether a person is likely to have diabetes based on health and medical parameters. The project combines data preprocessing, feature scaling, machine learning classification, and an interactive Streamlit interface to provide real-time predictions.
+An educational **binary classification project** that predicts the diabetes outcome in the supplied dataset using health-related features, preprocessing, class balancing, and a Random Forest classifier.
 
-## 📌 Overview
+The project includes a saved model and scaler and a Streamlit interface for entering patient parameters and generating a model prediction.
 
-The Diabetes Prediction System is an end-to-end machine learning project that demonstrates how a trained classification model can be integrated into an interactive web application.
+> **Medical disclaimer:** This project is for educational and machine-learning demonstration purposes only. Its predictions are not medical diagnoses or medical advice.
 
-Users can enter the required health parameters through the Streamlit interface, and the application processes the input using the saved scaler before passing it to the trained machine learning model.
+## What This Project Does
 
-The project covers the complete workflow from dataset preparation and model development to model serialization and deployment through Streamlit.
+- Loads and cleans the diabetes dataset.
+- Replaces zero values in selected clinical fields with missing values.
+- Imputes those missing values with the corresponding feature median.
+- Balances the classes using SMOTE.
+- Standardizes features with `StandardScaler`.
+- Trains a Random Forest classifier.
+- Also trains a Logistic Regression model for comparison.
+- Saves the trained model and scaler with Pickle.
+- Uses Streamlit to collect inputs and display predictions.
 
-## ✨ Features
+## Input Features
 
-- Interactive Streamlit web application
-- Real-time diabetes prediction
-- Machine learning-based classification
-- Data preprocessing and feature preparation
-- Feature scaling using a saved scaler
-- Pre-trained machine learning model
-- User-friendly prediction interface
-- Dataset included for experimentation
-- Reusable trained model and scaler
-- Reproducible environment using `requirements.txt`
+The Streamlit application accepts:
 
-## 🛠️ Tech Stack
+| Feature | Description |
+|---|---|
+| Pregnancies | Number of pregnancies |
+| Glucose | Plasma glucose concentration |
+| BloodPressure | Diastolic blood pressure |
+| SkinThickness | Triceps skin-fold thickness |
+| Insulin | Serum insulin level |
+| BMI | Body mass index |
+| DiabetesPedigreeFunction | Diabetes pedigree function |
+| Age | Age in years |
+
+## Machine Learning Workflow
+
+```text
+Diabetes Dataset
+      ↓
+Data Cleaning
+      ↓
+Median Imputation
+      ↓
+SMOTE Class Balancing
+      ↓
+Train / Test Split
+      ↓
+Standard Scaling
+      ↓
+Random Forest + Logistic Regression
+      ↓
+Model Evaluation
+      ↓
+Model + Scaler Serialization
+      ↓
+Streamlit Prediction App
+```
+
+## Models
+
+### Random Forest Classifier
+
+The application uses a Random Forest classifier as its saved prediction model.
+
+Configured parameters include:
+
+- 500 trees
+- Maximum depth: 10
+- Minimum samples split: 5
+- Minimum samples leaf: 2
+- Square-root feature selection
+- `random_state=42`
+
+### Logistic Regression
+
+A Logistic Regression model is also trained as a comparison model during the development workflow.
+
+## Preprocessing
+
+The training script replaces zero values with missing values for:
+
+- Glucose
+- BloodPressure
+- SkinThickness
+- Insulin
+- BMI
+
+Those missing values are filled using the median of each feature before model training.
+
+Feature scaling is performed with `StandardScaler`, and the fitted scaler is saved as `scaler.pkl` so application inputs can be transformed consistently.
+
+## Dataset
+
+The repository contains the source dataset:
+
+```text
+diabetes.csv
+```
+
+The target column is `Outcome`, with the remaining columns used as model features.
+
+## Project Structure
+
+```text
+diabetes-prediction/
+├── app.py
+├── diabetes_prediction.py
+├── diabetes.csv
+├── model.pkl
+├── scaler.pkl
+├── requirements.txt
+└── README.md
+```
+
+## Key Files
+
+| File | Purpose |
+|---|---|
+| `diabetes_prediction.py` | Data preparation, model training, evaluation, and serialization |
+| `app.py` | Streamlit prediction interface |
+| `diabetes.csv` | Source dataset |
+| `model.pkl` | Saved Random Forest model |
+| `scaler.pkl` | Saved StandardScaler |
+| `requirements.txt` | Python dependencies |
+
+## Run Locally
+
+### Prerequisites
+
+- Python 3.x
+- pip
+
+### Setup
+
+```bash
+git clone https://github.com/bhaskar-nb/diabetes-prediction.git
+cd diabetes-prediction
+python -m venv venv
+```
+
+On Windows PowerShell:
+
+```powershell
+venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application:
+
+```bash
+streamlit run app.py
+```
+
+## Model Evaluation
+
+The training script calculates:
+
+- Accuracy
+- Confusion matrix
+- Classification report
+
+These results are printed during execution of `diabetes_prediction.py`.
+
+> **Methodology note:** The current script applies SMOTE before the train/test split. This can introduce information leakage into evaluation data and can make the reported test metrics optimistic. A stronger implementation would split first, then apply SMOTE only to the training set.
+
+## Limitations
+
+- The model is trained on the supplied historical dataset and should not be treated as a clinical tool.
+- The project does not provide external clinical validation.
+- The current evaluation workflow has the SMOTE-before-split leakage issue noted above.
+- Model performance may change with different train/test splits or datasets.
+- The Streamlit application returns a classification result but does not provide a calibrated clinical risk score.
+
+## Future Improvements
+
+- Apply SMOTE only after the train/test split.
+- Use a Pipeline to combine preprocessing, resampling, and model training safely.
+- Add cross-validation.
+- Report precision, recall, F1-score, ROC-AUC, and other relevant metrics clearly.
+- Compare multiple models systematically.
+- Add calibrated prediction probabilities.
+- Add model explainability such as model-derived feature importance.
+- Add tests for input validation and preprocessing consistency.
+
+## Skills Demonstrated
 
 - Python
 - Pandas
 - NumPy
 - Scikit-learn
 - Imbalanced-learn
+- Random Forest
+- Logistic Regression
+- StandardScaler
+- SMOTE
+- Classification evaluation
+- Pickle model serialization
 - Streamlit
-- Pickle
-- Git
-- GitHub
+- Data preprocessing
+- Git & GitHub
 
-## 🤖 Machine Learning
+## Portfolio Relevance
 
-The project uses a trained classification model to predict the likelihood of diabetes based on the input health parameters.
+This project demonstrates an applied machine-learning workflow from **raw health dataset → preprocessing → class balancing → model training → evaluation → serialized model → interactive application**.
 
-The machine learning workflow includes:
+It is best presented as a **machine-learning learning project**, not as a clinical or production healthcare system.
 
-1. Loading the diabetes dataset
-2. Exploring and preparing the data
-3. Separating input features and target variable
-4. Preprocessing the data
-5. Scaling the input features
-6. Training the classification model
-7. Evaluating the model
-8. Saving the trained model
-9. Saving the feature scaler
-10. Loading the model and scaler in the Streamlit application
-11. Generating predictions from user input
+## Author
 
-The trained model is stored in:
-
-    model.pkl
-
-The feature scaler is stored in:
-
-    scaler.pkl
-
-## 📊 Dataset
-
-The project uses a diabetes dataset containing health-related patient attributes and diabetes outcomes.
-
-The dataset is stored in:
-
-    diabetes.csv
-
-The dataset is used for model development, preprocessing, and experimentation.
-
-## 📂 Project Structure
-
-    diabetes-prediction/
-    │
-    ├── app.py
-    ├── diabetes_prediction.py
-    ├── diabetes.csv
-    ├── model.pkl
-    ├── scaler.pkl
-    ├── requirements.txt
-    └── README.md
-
-## 📁 Project Files
-
-### app.py
-
-The main Streamlit application responsible for collecting user inputs and displaying diabetes predictions.
-
-### diabetes_prediction.py
-
-Contains the machine learning workflow used for data preparation, preprocessing, model training, evaluation, and saving the trained model and scaler.
-
-### diabetes.csv
-
-The dataset used for machine learning development and analysis.
-
-### model.pkl
-
-The serialized trained machine learning model used by the Streamlit application.
-
-### scaler.pkl
-
-The serialized feature scaler used to transform user inputs in the same way as the training data.
-
-### requirements.txt
-
-Contains the Python packages required to run the project.
-
-### README.md
-
-Project documentation and setup instructions.
-
-## 🖥️ Application
-
-The application is built using Streamlit and provides an interactive interface for entering the required health parameters.
-
-The user provides the input values, the application preprocesses the data using the saved scaler, and the trained model generates the final prediction.
-
-## 🔄 Prediction Workflow
-
-    User enters health parameters
-              │
-              ▼
-       Input validation
-              │
-              ▼
-      Feature preprocessing
-              │
-              ▼
-        Feature scaling
-              │
-              ▼
-       Trained ML model
-              │
-              ▼
-          Prediction
-              │
-              ▼
-       Result displayed
-
-## ⚙️ Installation
-
-### 1. Clone the Repository
-
-    git clone https://github.com/bhaskar-nb/diabetes-prediction.git
-
-### 2. Navigate to the Project Directory
-
-    cd diabetes-prediction
-
-### 3. Create a Virtual Environment
-
-Windows:
-
-    python -m venv venv
-
-### 4. Activate the Virtual Environment
-
-Windows PowerShell:
-
-    venv\Scripts\activate
-
-### 5. Install Dependencies
-
-    pip install -r requirements.txt
-
-## ▶️ Run the Application
-
-Start the Streamlit application using:
-
-    streamlit run app.py
-
-After running the command, Streamlit will provide a local URL in the terminal.
-
-Open the URL in your browser to use the Diabetes Prediction System.
-
-## 📦 Requirements
-
-The project dependencies are maintained in:
-
-    requirements.txt
-
-The required packages include:
-
-- pandas
-- numpy
-- scikit-learn
-- imbalanced-learn
-- streamlit
-
-## 🎯 Project Objectives
-
-The project was developed to:
-
-- Build a machine learning system for diabetes prediction
-- Apply data preprocessing techniques
-- Scale input features before prediction
-- Train and evaluate a classification model
-- Save and reuse the trained model
-- Save and reuse the feature scaler
-- Develop an interactive Streamlit application
-- Demonstrate an end-to-end machine learning workflow
-
-## 🔮 Future Improvements
-
-Potential improvements include:
-
-- Compare multiple classification algorithms
-- Hyperparameter tuning
-- Cross-validation
-- Improve model evaluation and reporting
-- Add model performance metrics
-- Add feature importance visualization
-- Display prediction probability
-- Improve input validation
-- Improve Streamlit UI and user experience
-- Deploy the application to a cloud platform
-- Implement automated model retraining
-
-## ⚠️ Disclaimer
-
-This project is developed for educational and machine learning demonstration purposes.
-
-The predictions generated by this application should not be considered medical advice or a medical diagnosis. Medical decisions should always be made with the guidance of a qualified healthcare professional.
-
-## 👨‍💻 Author
-
-### Bhaskar Nakka
-
-GitHub:
-
-https://github.com/bhaskar-nb
+**Bhaskar Nakka**  
+Data Analyst | SQL · Python · Excel · Tableau · Power BI
